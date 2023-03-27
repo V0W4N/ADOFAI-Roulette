@@ -10,6 +10,7 @@ apiLink = "https://be.t21c.kro.kr/levels"
 folder = os.getenv('APPDATA').replace("\\", "/") + "/"
 saveFilePath = folder + "save.json"
 chartFilePath = folder + "charts.json"
+cycleFilePath = folder + "cycle.json"
 
 if hasattr(sys, "_MEIPASS"):
     os.chdir(sys._MEIPASS)
@@ -118,6 +119,7 @@ class ForumScraper:
 
             if request:
                 self.successText = "Loaded charts from API."
+                self.chartList = []
                 self.chartList = json.loads(request.content.decode())["results"]
                 self.chartValidator()
                 self.prevTick = pg.time.get_ticks()
@@ -140,8 +142,9 @@ class ForumScraper:
     def chartValidator(self):
         validCharts = []
         for chart in self.chartList:
-            if chart['dlLink']:
+            if chart['dlLink'] and chart not in validCharts:
                 validCharts.append(chart)
+        print(len(self.chartList))
         self.chartList = validCharts
 
     def displayLoading(self):
@@ -331,6 +334,7 @@ class Utilities:
         self.charts = None
         self.IDlist = []
         self.ChartList = []
+        self.chartCycle = []
 
     def findSuitableCharts(self):
         if self.charts:
@@ -343,7 +347,7 @@ class Utilities:
                                'song': 'a silly cat video',
                                'artist': 'No suitable charts found!',
                                'creator': 'You probably have entered difficulty that does not have any charts set with',
-                               'diff': 5,
+                               'diff': 21,
                                'dlLink': 'https://www.youtube.com/watch?v=L3tsYC5OYhQ'}]
 
     def setDiffs(self, minDiff, maxDiff):
@@ -359,9 +363,19 @@ class Utilities:
             self.findSuitableCharts()
 
     def pickChart(self):
-        if self.ChartList:
-            choice = random.choice(self.ChartList)
-            return choice
+        if os.path.exists(cycleFilePath):
+            with open(cycleFilePath, "r") as file:
+                if file.read():
+                    file.seek(0)
+                    self.chartCycle = json.load(file)
+        if not self.chartCycle:
+            self.chartCycle = self.ChartList.copy()
+        choice = self.chartCycle.pop(random.randint(0, len(self.chartCycle)-1))
+        with open(cycleFilePath, "w+") as file:
+            json.dump(self.chartCycle, file)
+        return choice
+
+
 
     def validateInput(self, inp):
         badInput = False
@@ -465,6 +479,8 @@ class UI:
 
     def clearProgress(self):
         with open(saveFilePath, "w+") as file:
+            file.write("")
+        with open(cycleFilePath, "w+") as file:
             file.write("")
 
     def render(self):
