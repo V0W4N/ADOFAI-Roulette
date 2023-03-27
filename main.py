@@ -108,14 +108,12 @@ class ForumScraper:
                         savedCharts = True
                         self.prevTick = pg.time.get_ticks()
                         self.successText = "Loaded charts from cache."
-                print(savedCharts)
 
             try:
                 request = requests.get(self.link)
             except Exception:
                 self.successText = "Failed to get from API!"
                 request = None
-                print(savedCharts)
                 if not savedCharts:
                     raise Exception
 
@@ -146,7 +144,6 @@ class ForumScraper:
         for chart in self.chartList:
             if chart['dlLink'] and chart not in validCharts:
                 validCharts.append(chart)
-        print(len(self.chartList))
         self.chartList = validCharts
 
     def displayLoading(self):
