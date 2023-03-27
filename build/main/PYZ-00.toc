@@ -535,18 +535,6 @@
    'C:\\Users\\Acer '
    'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\platform.py',
    'PYMODULE'),
-  ('tracemalloc',
-   'C:\\Users\\Acer '
-   'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tracemalloc.py',
-   'PYMODULE'),
-  ('_py_abc',
-   'C:\\Users\\Acer '
-   'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\_py_abc.py',
-   'PYMODULE'),
-  ('stringprep',
-   'C:\\Users\\Acer '
-   'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\stringprep.py',
-   'PYMODULE'),
   ('getpass',
    'C:\\Users\\Acer '
    'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\getpass.py',
@@ -570,6 +558,18 @@
   ('bisect',
    'C:\\Users\\Acer '
    'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\bisect.py',
+   'PYMODULE'),
+  ('stringprep',
+   'C:\\Users\\Acer '
+   'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\stringprep.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'C:\\Users\\Acer '
+   'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\_py_abc.py',
+   'PYMODULE'),
+  ('tracemalloc',
+   'C:\\Users\\Acer '
+   'Nitro\\AppData\\Local\\Programs\\Python\\Python310\\lib\\tracemalloc.py',
    'PYMODULE'),
   ('tkinter.messagebox',
    'C:\\Users\\Acer '
