@@ -6,7 +6,7 @@ from math import floor
 from tkinter import messagebox
 
 dims = (480, 560)
-apiLink = "https://be.t21c.kro.kr/levels"
+apiLink = "https://be.t21c.kro.krf/levels"
 folder = os.getenv('APPDATA').replace("\\", "/") + "/"
 saveFilePath = folder + "save.json"
 chartFilePath = folder + "charts.json"
@@ -108,12 +108,14 @@ class ForumScraper:
                         savedCharts = True
                         self.prevTick = pg.time.get_ticks()
                         self.successText = "Loaded charts from cache."
+                print(savedCharts)
 
             try:
                 request = requests.get(self.link)
             except Exception:
                 self.successText = "Failed to get from API!"
                 request = None
+                print(savedCharts)
                 if not savedCharts:
                     raise Exception
 
@@ -125,7 +127,7 @@ class ForumScraper:
                 self.prevTick = pg.time.get_ticks()
                 with open(chartFilePath, "w+") as file:
                     json.dump(self.chartList, file, indent=4)
-            else:
+            elif not savedCharts:
                 raise Exception
             util.addCharts(self.chartList)
 
