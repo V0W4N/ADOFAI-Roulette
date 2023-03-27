@@ -6,7 +6,7 @@ from math import floor
 from tkinter import messagebox
 
 dims = (480, 560)
-apiLink = "https://be.t21c.kro.krf/levels"
+apiLink = "https://be.t21c.kro.kr/levels"
 folder = os.getenv('APPDATA').replace("\\", "/") + "/"
 saveFilePath = folder + "save.json"
 chartFilePath = folder + "charts.json"
