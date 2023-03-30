@@ -3,11 +3,9 @@ import os, sys
 import requests as req
 from tkinter import messagebox
 
-if hasattr(sys, "_MEIPASS"):
-    os.chdir(sys._MEIPASS)
 
 url = "https://github.com/V0W4N/ADOFAI-Roulette/blob/bbda10c8e85719f07d5de592a08197d0ac43d5c9/dist/Roulette.exe?raw=true"
-file = os.path.join(os.getcwd(), "Roulette.exe")
+file = os.path.join(os.getenv('APPDATA'), "Roulette.exe")
 
 
 def main():

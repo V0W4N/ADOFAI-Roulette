@@ -34,7 +34,7 @@ VSVersionInfo(
         StringStruct(u'FileDescription', u'Chart Roulette for the game A Dance Of Fire And Ice'),
         StringStruct(u'FileVersion', u'1.2.1.0'),
         StringStruct(u'InternalName', u'Roulette'),
-        StringStruct(u'LegalCopyright', u'© the voices Inc. All rights reserved.'),
+        StringStruct(u'LegalCopyright', u'© The voices Inc. All rights reserved.'),
         StringStruct(u'OriginalFilename', u'Roulette.exe'),
         StringStruct(u'ProductName', u'ADOFAI Roulette'),
         StringStruct(u'ProductVersion', u'1.2.1.0')])
