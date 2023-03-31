@@ -1,4 +1,4 @@
-Version: 1.2.1
+Version: 1.2.2
 CompanyName: V0W4N
 FileDescription: Chart Roulette for the game A Dance Of Fire And Ice
 InternalName: Roulette

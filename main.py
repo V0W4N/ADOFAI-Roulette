@@ -1,12 +1,14 @@
 import json, threading, random, webbrowser, os, sys, requests
 import pygame as pg
 
-
 from math import floor
 from tkinter import messagebox
 
+version = "1.2.2"
+
 dims = (480, 560)
 apiLink = "https://be.t21c.kro.kr/levels"
+versionLink = "https://api.github.com/repos/V0W4N/ADOFAI-Roulette/releases/latest"
 folder = os.getenv('APPDATA').replace("\\", "/") + "/"
 saveFilePath = folder + "save.json"
 chartFilePath = folder + "charts.json"
@@ -82,6 +84,32 @@ diffColors = {
 
 def center(pos, size):
     return pos[0] - size[0] / 2, pos[1] - size[1] / 2
+
+
+class VersionControl:
+    def __init__(self, link):
+        self.link = link
+        self.newestVer = None
+        self.getVersion()
+        self.warnText = smallFont.render("New version detected! Please update.", True, "green")
+        self.pos = center((dims[0]/2,10), self.warnText.get_rect().size)
+
+    def getVersion(self):
+        def getThread():
+            try:
+                request = requests.get(self.link)
+                name = json.loads(request.content.decode())["name"]
+                self.newestVer = name[-5:-1]+name[-1]
+            except Exception:
+                self.newestVer = None
+
+        t = threading.Thread(target=getThread)
+        t.start()
+
+
+    def warnVersion(self):
+        if self.newestVer and self.newestVer != version:
+            screen.blit(self.warnText, self.pos)
 
 
 class ForumScraper:
@@ -719,7 +747,7 @@ class UI:
             smallFont.render("chart by " + str(self.chart['creator']), True, "white"),
             font.render(f"Difficulty: ", True, "white"),
             "skip small",
-            bigFont.render(f"Your goal: {self.currProgress + 1}%", True, "white"),
+            bigFont.render(f"Your goal: {self.currProgress + 1}+%", True, "white"),
             diffFont.render(str(self.util.backParse(self.chart["diff"])), True, "white"),
             smallFont.render(f"Skipped: {self.skippedCharts}", True, "white")
         ]
@@ -818,6 +846,7 @@ class UI:
 
 forum = ForumScraper(apiLink)
 ui = UI()
+vc = VersionControl(versionLink)
 print("starting")
 forum.getCharts(ui.util)
 
@@ -840,6 +869,6 @@ if __name__ == "__main__":
         if forum.chartList is not None:
             ui.render()
             ui.process(events)
-
+        vc.warnVersion()
         pg.display.flip()
         clock.tick(fps)

@@ -1,6 +1,6 @@
 /build/
 /dist/
 main.spec
-launcher.py
+updater.py
 terminal commands
 ver.py
