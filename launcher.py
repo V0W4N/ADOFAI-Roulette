@@ -4,7 +4,7 @@ import requests as req
 from tkinter import messagebox
 
 
-url = "https://github.com/V0W4N/ADOFAI-Roulette/blob/bbda10c8e85719f07d5de592a08197d0ac43d5c9/dist/Roulette.exe?raw=true"
+url = "https://github.com/V0W4N/ADOFAI-Roulette/releases/download/ADOFAI/Roulette.exe"
 file = os.path.join(os.getenv('APPDATA'), "Roulette.exe")
 
 
