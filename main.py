@@ -367,8 +367,9 @@ class Utilities:
         if self.charts:
             self.ChartList = []
             for chart in self.charts:
-                if self.minDiff <= chart["diff"] <= self.maxDiff:
-                    self.ChartList.append(chart)
+                if chart["diff"]:
+                    if self.minDiff <= chart["diff"] <= self.maxDiff:
+                        self.ChartList.append(chart)
         if not self.ChartList:
             self.ChartList = [{'id': 1,
                                'song': 'a silly cat video',
@@ -809,7 +810,8 @@ class UI:
     def buttonClickedSkip(self):
         if (
                 messagebox.askokcancel("Skip chart?",
-                                       "Are you sure you want to skip this chart? You will loose one percent of your progress and add one skipped chart to the count.")
+                                       "Are you sure you want to skip this chart? You will loose one "
+                                       "percent of your progress and add one skipped chart to the count.")
         ):
             if self.currProgress > 1:
                 self.currProgress -= 1
