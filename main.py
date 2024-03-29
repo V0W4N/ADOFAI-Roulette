@@ -4,7 +4,7 @@ import pygame as pg
 from math import floor
 from tkinter import messagebox
 
-version = "1.2.2"
+version = "1.2.4"
 
 dims = (480, 560)
 apiLink = "https://be.t21c.kro.kr/levels"
@@ -52,35 +52,70 @@ CENTER = dims[0] / 2, dims[1] / 2
 pg.display.set_caption("ADOFAI Roulette")
 pg.display.set_icon(pg.image.load(icon))
 diffColors = {
-    20.0: (67, 18, 16),
-    20.05: (65, 24, 31),
-    20.1: (62, 29, 44),
-    20.15: (58, 33, 58),
-    20.2: (54, 38, 77),
-    20.25: (50, 39, 90),
-    20.3: (47, 40, 101),
-    20.35: (44, 41, 111),
-    20.4: (40, 41, 124),
-    20.45: (36, 40, 134),
-    20.5: (33, 40, 142),
-    20.55: (32, 39, 149),
-    20.6: (30, 38, 157),
-    20.65: (29, 36, 161),
-    20.7: (31, 35, 162),
-    20.75: (35, 31, 156),
-    20.8: (40, 19, 143),
-    20.85: (43, 14, 129),
-    20.9: (44, 10, 117),
-    20.95: (46, 8, 108),
-    21.0: (47, 5, 101),
-    21.05: (48, 4, 90),
-    21.1: (50, 3, 85),
-    21.15: (57, 15, 88),
-    21.2: (69, 31, 101),
-    21.25: (83, 51, 122),
-    21.3: (85, 55, 125),
-    21.35: (40, 0, 0)}
+    'P1':   '0099ff',
+    'P2':   '00a2ff',
+    'P3':   '00aaff',
+    'P4':   '00b2ff',
+    'P5':   '00bbff',
+    'P6':   '00c3ff',
+    'P7':   '00ccff',
+    'P8':   '00ddff',
+    'P9':   '00e5ff',
+    'P10':  '00eeff',
+    'P11':  '00ffff',
+    'P12':  '00ffe8',
+    'P13':  '00ffd0',
+    'P14':  '00ffb8',
+    'P15':  '00ffaa',
+    'P16':  '00ff88',
+    'P17':  '00ff70',
+    'P18':  '00ff48',
+    'P19':  '00ff30',
+    'P20':  '44ff15',
+    'G1':   'F2A700',
+    'G2':   'F09E08',
+    'G3':   'EE9510',
+    'G4':   'ED8C18',
+    'G5':   'EB8420',
+    'G6':   'EA7B28',
+    'G7':   'E87230',
+    'G8':   'E66938',
+    'G9':   'E56040',
+    'G10':  'E35848',
+    'G11':  'E14F4F',
+    'G12':  'E04657',
+    'G13':  'DE3D5F',
+    'G14':  'DC3467',
+    'G15':  'DB2C6F',
+    'G16':  'D92377',
+    'G17':  'D71A7F',
+    'G18':  'D61187',
+    'G19':  'D4088F',
+    'G20':  'D20097',
+    'U1':   '7B4FB2',
+    'U2':   '744AA8',
+    'U3':   '6E469F',
+    'U4':   '674295',
+    'U5':   '613E8C',
+    'U6':   '5A3A83',
+    'U7':   '543679',
+    'U8':   '4D3170',
+    'U9':   '472D67',
+    'U10':  '40295D',
+    'U11':  '3A2554',
+    'U12':  '33214A',
+    'U13':  '2D1D41',
+    'U14':  '261838',
+    'U15':  '20142E',
+    'U16':  '191025',
+    'U17':  '130C1C',
+    'U18':  '0C0812',
+    'U19':  '060409',
+    'U20':  '000000'
+    }
 
+for item in diffColors.items():
+    diffColors[item[0]] = [int(item[1][i:i+2], 16) for i in (0, 2, 4)]
 
 def center(pos, size):
     return pos[0] - size[0] / 2, pos[1] - size[1] / 2
@@ -188,7 +223,7 @@ class ForumScraper:
                     self.dotAmount += 1
                 self.prevTick = pg.time.get_ticks()
             dots = self.dotAmount * "."
-            loadText = font.render(f"Loading charts from The 21 Forum{dots}", True, "white")
+            loadText = font.render(f"Loading charts from TUF API{dots}", True, "white")
             screen.blit(loadText, center(CENTER, loadText.get_rect().size))
 
 
@@ -356,31 +391,37 @@ class Link:
 
 class Utilities:
     def __init__(self):
-        self.minDiff = 0
-        self.maxDiff = 0
+        self.minDiff = [1, "P1"]
+        self.maxDiff = [220, "U20"]
         self.charts = None
         self.IDlist = []
         self.ChartList = []
         self.chartCycle = []
 
+    def evalDiff(self, diff):
+        order = ["P", "G", "U"]
+        return order.index(diff[0])*100+int(diff[1:])
+
     def findSuitableCharts(self):
         if self.charts:
             self.ChartList = []
             for chart in self.charts:
-                if chart["diff"]:
-                    if self.minDiff <= chart["diff"] <= self.maxDiff:
+                if self.validateInput(chart["pguDiff"]):
+                    print(self.minDiff[0], self.evalDiff(chart["pguDiff"]), self.maxDiff[0])
+                    if self.minDiff[0] <= self.evalDiff(chart["pguDiff"]) <= self.maxDiff[0]:
                         self.ChartList.append(chart)
         if not self.ChartList:
             self.ChartList = [{'id': 1,
                                'song': 'a silly cat video',
                                'artist': 'No suitable charts found!',
                                'creator': 'You probably have entered difficulty that does not have any charts set with',
-                               'diff': 21,
+                               'diff': "U1",
                                'dlLink': 'https://www.youtube.com/watch?v=L3tsYC5OYhQ'}]
 
     def setDiffs(self, minDiff, maxDiff):
-        self.minDiff, self.maxDiff = minDiff, maxDiff
-        if self.minDiff > self.maxDiff:
+        self.minDiff = self.evalDiff(minDiff), minDiff
+        self.maxDiff = self.evalDiff(maxDiff), maxDiff
+        if self.minDiff[0] > self.maxDiff[0]:
             self.minDiff, self.maxDiff = self.maxDiff, self.minDiff
         if self.charts:
             self.findSuitableCharts()
@@ -403,51 +444,18 @@ class Utilities:
             json.dump(self.chartCycle, file)
         return choice
 
-
-
     def validateInput(self, inp):
-        badInput = False
-        if inp == "":
-            badInput = True
-        split = inp.split(".")
-        if "" in split:
-            badInput = True
-        elif len(split) > 2:
-            badInput = True
-        elif len(split) == 1:
-            if split[0][-1] != "+" and split[0].count("+") >= 1:
-                badInput = True
-            elif not minPossibleDiff <= self.parseInput(inp) <= maxPossibleDiff:
-                badInput = True
-        elif inp.count("+") == 1 and inp[-1] != "+":
-            badInput = True
-        elif split[1].count("+") > 1 or split[0].count("+") > 0:
-            badInput = True
-
-        elif not minPossibleDiff <= self.parseInput(inp) <= maxPossibleDiff:
-            badInput = True
-        return badInput
-
-    def parseInput(self, text):
-        diffNum = 0
-        if text[-1] == "+":
-            diffNum += 0.05
-            text = text[:-1]
-        diffNum += round(float(text), 1)
-        return round(diffNum, 2)
-
-    def backParse(self, num: float):
-        whole = int(floor(num))
-        fract = int(round(num * 100 - whole * 100))
-        text = ""
-        if fract % 10 == 5:
-            text = "+"
-            fract -= 5
-        if fract > 0:
-            text = str(round(whole + fract / 100, 2)) + text
-        else:
-            text = str(whole) + text
-        return text
+        if not (1 <= len(inp) < 20):
+            return False
+        ltr = inp[0]
+        if ltr not in "PGU":
+            return False
+        num = inp[1:]
+        if not num.isdigit():
+            return False
+        if not 1 <= int(num) <= 20:
+            return False
+        return True
 
 
 class UI:
@@ -500,16 +508,14 @@ class UI:
                     "currProgress": self.currProgress,
                     "skippedCharts": self.skippedCharts,
                     "completedCharts": self.completedCharts,
-                    "diff": [self.util.minDiff, self.util.maxDiff],
+                    "diff": [self.util.minDiff[1], self.util.maxDiff[1]],
                     "chart": self.chart}
         with open(saveFilePath, "w+") as file:
             json.dump(saveDict, file)
 
     def clearProgress(self):
-        with open(saveFilePath, "w+") as file:
-            file.write("")
-        with open(cycleFilePath, "w+") as file:
-            file.write("")
+        os.remove(saveFilePath)
+        os.remove(cycleFilePath)
 
     def render(self):
         if self.currScreen == "start":
@@ -539,7 +545,7 @@ class UI:
                      titleFont.render("A", True, "white"),
                      titleFont.render("I", True, (50,50, 255)),
                      subtitleFont.render("Roulette", True, "white")],
-                    font.render("Based on The 21 Forum API", True, "white"),
+                    font.render("Based on The Universal Forum API", True, "white"),
                     smallFont.render("Program by V0W4N", True, "white"),
                     smallFont.render("Idea by WillTRM", True, "white")
                     ]
@@ -549,7 +555,7 @@ class UI:
                              label="Min Difficulty",
                              centerPos=True,
                              digitOnlyMode=True,
-                             allowedChars="+.",
+                             allowedChars="PGU",
                              lineThickness=2)
 
         maxTextbox = TextBox(pos=(dims[0] / 2 + TBOffset[0], dims[1] / 2 - TBOffset[1] - textPadding),
@@ -557,7 +563,7 @@ class UI:
                              label="Max Difficulty",
                              centerPos=True,
                              digitOnlyMode=True,
-                             allowedChars="+.",
+                             allowedChars="PGU",
                              lineThickness=2)
 
         confirmButton = Button(pos=(dims[0] / 2, dims[1] - 100),
@@ -671,7 +677,7 @@ class UI:
                 continue
             if self.mainTextRects.index(toRender) == len(self.mainTextRects) - 5:
                 diffPos = pos[0] + toRender.get_rect().w + 20, pos[1] + toRender.get_rect().h / 2 + 4
-                pg.draw.circle(screen, diffColors[self.chart["diff"]], diffPos, fontSize * 0.9)
+                pg.draw.circle(screen, diffColors[self.chart["pguDiff"]], diffPos, fontSize * 0.9)
                 screen.blit(self.mainTextRects[-2],
                             center((diffPos[0] + 1, diffPos[1] - 1), self.mainTextRects[-2].get_rect().size))
             screen.blit(toRender, pos)
@@ -749,7 +755,7 @@ class UI:
             font.render(f"Difficulty: ", True, "white"),
             "skip small",
             bigFont.render(f"Your goal: {self.currProgress + 1}+%", True, "white"),
-            diffFont.render(str(self.util.backParse(self.chart["diff"])), True, "white"),
+            diffFont.render(self.chart["pguDiff"], True, "white"),
             smallFont.render(f"Skipped: {self.skippedCharts}", True, "white")
         ]
 
@@ -760,7 +766,7 @@ class UI:
             bigFont.render("You have completed the roulette!", True, "white"),
             "skip",
             font.render(
-                f"Chosen difficulties: {self.util.backParse(self.util.minDiff)} ~ {self.util.backParse(self.util.maxDiff)}",
+                f"Chosen difficulties: {self.util.minDiff[1]} ~ {self.util.maxDiff[1]}",
                 True, "white"),
             font.render(f"You completed {self.completedCharts} charts and skipped {self.skippedCharts}", True, "white")
         ]
@@ -770,8 +776,8 @@ class UI:
 
             if self.validateInput(self.startScreen["minTextbox"].text) and \
                     self.validateInput(self.startScreen["maxTextbox"].text):
-                self.startScreen["minTextbox"].verifiedValue = self.util.parseInput(self.startScreen["minTextbox"].text)
-                self.startScreen["maxTextbox"].verifiedValue = self.util.parseInput(self.startScreen["maxTextbox"].text)
+                self.startScreen["minTextbox"].verifiedValue = self.startScreen["minTextbox"].text
+                self.startScreen["maxTextbox"].verifiedValue = self.startScreen["maxTextbox"].text
                 self.util.setDiffs(self.startScreen["minTextbox"].verifiedValue,
                                    self.startScreen["maxTextbox"].verifiedValue)
                 self.chart = self.util.pickChart()
@@ -831,11 +837,11 @@ class UI:
             self.clearProgress()
 
     def validateInput(self, inp):
-        badInput = self.util.validateInput(inp)
-        if badInput:
+        validInput = self.util.validateInput(inp)
+        if not validInput:
             self.badInpText = "Bad input!!!"
             self.badInpCountdown[0] = pg.time.get_ticks()
-        return not badInput
+        return validInput
 
     def badInputDisplay(self):
         if pg.time.get_ticks() - self.badInpCountdown[0] < self.badInpCountdown[1]:

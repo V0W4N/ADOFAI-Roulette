@@ -6,10 +6,10 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['venv/Lib/site-packages/'],
+    pathex=['C:\\Users\\Acer Nitro\\PycharmProjects\\roulette\\venv\\Lib\\site-packages'],
     binaries=[],
-    datas=[('icon.png', '.'), ('bg.png', '.'), ('notosanskr-medium.otf', '.')],
-    hiddenimports=['pygame', 'requests'],
+    datas=[('icon.png', '.'), ('bg.png', '.'), ('NotoSansKR-Medium.otf', '.')],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

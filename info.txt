@@ -1,8 +1,8 @@
-Version: 1.2.2
+Version: 1.2.3
 CompanyName: V0W4N
 FileDescription: Chart Roulette for the game A Dance Of Fire And Ice
 InternalName: Roulette
-LegalCopyright: © The voices Inc. All rights reserved.
+LegalCopyright: © The Voices Inc. All rights reserved.
 OriginalFilename: Roulette.exe
 ProductName: ADOFAI Roulette
 Translation:
